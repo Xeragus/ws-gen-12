@@ -1,62 +1,54 @@
-const Category = require("..models/category.js");
+const Category = require("../models/category");
+const successResponse = require('../lib/responses/success');
+const errorResponse = require('../lib/responses/error');
 
 module.exports = {
   fetchAll: async (req, res) => {
-    const Categories = await Category.find();
-
-    res.send({
-      error: false,
-      message: "List of all Categories",
-      Categories,
-    });
+    try {
+      const categories = await Category.find();
+      successResponse(res, "List of all categories", categories)
+    } catch (error) {
+      errorResponse(res, 400, error);
+    }
   },
   fetchOne: async (req, res) => {
-    const Categories = await Category.findById(req.params.id);
-
-    res.send({
-      error: false,
-      message: `Category with id #${Categories._id} is fetched`,
-      Categories,
-    });
+    try {
+      const category = await Category.findById(req.params.id);
+      successResponse(res, `Category with id #${category._id} is fetched`, category);
+    } catch (error) {
+      errorResponse(res, 400, error);
+    }
   },
   create: async (req, res) => {
     try {
-      const Categories = await Category.create(req.body);
-
-      res.send({
-        error: false,
-        message: `Category is successfully created`,
-        Categories,
-      });
+      const category = await Category.create(req.body);
+      successResponse(res, `Category is successfully created`, category);
     } catch (error) {
-      res.status(400).send({
-        error: true,
-        message: error.message,
-      });
+      errorResponse(res, 400, error);
     }
   },
   putUpdate: async (req, res) => {
-    await Category.findOneAndReplace({ _id: req.params.id }, req.body);
-
-    res.send({
-      error: false,
-      message: `Category with id ${req.params.id} is updated`,
-    });
+    try {
+      await Category.findOneAndReplace({ _id: req.params.id }, req.body);
+      successResponse(res, `Category with id ${req.params.id} is PUT updated`, {});
+    } catch (error) {
+      errorResponse(res, 400, error);
+    }
   },
   patchUpdate: async (req, res) => {
-    await Category.findByIdAndUpdate(req.params.id, req.body);
-
-    res.send({
-      error: false,
-      message: `Category with id ${req.params.id} is PATCH updated`,
-    });
+    try {
+      await Category.findByIdAndUpdate(req.params.id, req.body);
+      successResponse(res, `Category with id ${req.params.id} is PATCH updated`, {});
+    } catch (error) {
+      errorResponse(res, 400, error);
+    }
   },
   delete: async (req, res) => {
-    await Category.findByIdAndDelete(req.params.id);
-
-    res.send({
-      error: false,
-      message: `Category with id ${req.params.id} is deleted`,
-    });
+    try {
+      await Category.findByIdAndDelete(req.params.id);
+      successResponse(res, `Category with id ${req.params.id} is deleted`, {});
+    } catch (error) {
+      errorResponse(res, 400, error);
+    }
   },
 };

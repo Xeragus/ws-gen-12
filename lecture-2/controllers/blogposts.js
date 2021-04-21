@@ -2,22 +2,36 @@ const BlogPost = require('../models/blogpost');
 
 module.exports = {
   fetchAll: async (req, res) => { 
-    const blogPosts = await BlogPost.find();
+    try {
+      const blogPosts = await BlogPost.find();
 
-    res.send({
-      error: false,
-      message: 'List of all blogposts',
-      blogPosts
-    })
+      res.send({
+        error: false,
+        message: 'List of all blogposts',
+        blogPosts
+      });
+    } catch (error) {
+      res.send({
+        error: true,
+        message: error.message
+      });
+    }
   },
   fetchOne: async (req, res) => { 
-    const blogPost = await BlogPost.findById(req.params.id);
+    try {
+      const blogPost = await BlogPost.findById(req.params.id);
 
-    res.send({
-      error: false,
-      message: `Blog post with id #${blogPost._id} is fetched`,
-      blogPost
-    });
+      res.send({
+        error: false,
+        message: `Blog post with id #${blogPost._id} is fetched`,
+        blogPost
+      });
+    } catch (error) {
+      res.send({
+        error: true,
+        message: error.message
+      });
+    }
   },
   create: async (req, res) => {
     try {
@@ -36,27 +50,48 @@ module.exports = {
     }
   },
   putUpdate: async (req, res) => {
-    await BlogPost.findOneAndReplace({ _id: req.params.id }, req.body);
+    try {
+      await BlogPost.findOneAndReplace({ _id: req.params.id }, req.body);
 
-    res.send({
-      error: false,
-      message: `Blog post with id ${req.params.id} is updated`
-    });
+      res.send({
+        error: false,
+        message: `Blog post with id ${req.params.id} is updated`
+      });
+    } catch (error) {
+      res.status(400).send({
+        error: true,
+        message: error.message
+      });
+    }
   },
   patchUpdate: async (req, res) => {
-    await BlogPost.findByIdAndUpdate(req.params.id, req.body);
+    try {
+      await BlogPost.findByIdAndUpdate(req.params.id, req.body);
 
-    res.send({
-      error: false,
-      message: `Blog post with id ${req.params.id} is PATCH updated`
-    });
+      res.send({
+        error: false,
+        message: `Blog post with id ${req.params.id} is PATCH updated`
+      });
+    } catch (error) {
+      res.status(400).send({
+        error: true,
+        message: error.message
+      });
+    }
   },
   delete: async (req, res) => {
-    await BlogPost.findByIdAndDelete(req.params.id);
+    try {
+      await BlogPost.findByIdAndDelete(req.params.id);
 
-    res.send({
-      error: false,
-      message: `Blog post with id ${req.params.id} is deleted`,
-    });
+      res.send({
+        error: false,
+        message: `Blog post with id ${req.params.id} is deleted`,
+      });
+    } catch (error) {
+      res.status(400).send({
+        error: true,
+        message: error.message
+      });
+    }
   },
 }

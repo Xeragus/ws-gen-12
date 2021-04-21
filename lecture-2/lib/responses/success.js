@@ -1,7 +1,7 @@
-module.exports = (res, message, data) => {
-  res.send({
-    error: false,
-    message: message,
-    data,
-  });
-}
+module.exports = (res, message, stacode, data) => {
+    res.status(stacode).json({
+        status: "success",
+        message: message,
+        data,
+    });
+};

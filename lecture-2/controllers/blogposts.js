@@ -1,97 +1,23 @@
-const BlogPost = require('../models/blogpost');
+const BlogPost = require("../models/blogpost");
+const getAll = require("../lib/func/getAll");
+const getOne = require("../lib/func/getOne");
+const createOne = require("../lib/func/createOne");
+const updatePut = require("../lib/func/updatePut");
+const updatePatch = require("../lib/func/updatePatch");
+const deleteOne = require("../lib/func/deleteOne");
 
-module.exports = {
-  fetchAll: async (req, res) => { 
-    try {
-      const blogPosts = await BlogPost.find();
+exports.fetchAll = getAll(BlogPost, "List of all blogposts", 200, 404);
+exports.fetchOne = getOne(BlogPost, `Blog post with id >x< is fetched`, 200, 404);
+exports.create = createOne(BlogPost, `Blog Posts is successfully created`, 201, 400);
+exports.putUpdate = updatePut(BlogPost, `Blog post with id >x< is updated`, 200, 404);
+exports.patchUpdate = updatePatch(BlogPost, `Blog post with id >x< is PATCH updated`, 200, 404);
+exports.delete = deleteOne(BlogPost, `Blog post with id >x< is PATCH deleted`, 204, 404);
 
-      res.send({
-        error: false,
-        message: 'List of all blogposts',
-        blogPosts
-      });
-    } catch (error) {
-      res.send({
-        error: true,
-        message: error.message
-      });
-    }
-  },
-  fetchOne: async (req, res) => { 
-    try {
-      const blogPost = await BlogPost.findById(req.params.id);
-
-      res.send({
-        error: false,
-        message: `Blog post with id #${blogPost._id} is fetched`,
-        blogPost
-      });
-    } catch (error) {
-      res.send({
-        error: true,
-        message: error.message
-      });
-    }
-  },
-  create: async (req, res) => {
-    try {
-      const blogPost = await BlogPost.create(req.body);
-
-      res.send({
-        error: false,
-        message: `Blog post is successfully created`,
-        blogPost
-      });
-    } catch (error) {
-      res.status(400).send({
-        error: true,
-        message: error.message
-      });
-    }
-  },
-  putUpdate: async (req, res) => {
-    try {
-      await BlogPost.findOneAndReplace({ _id: req.params.id }, req.body);
-
-      res.send({
-        error: false,
-        message: `Blog post with id ${req.params.id} is updated`
-      });
-    } catch (error) {
-      res.status(400).send({
-        error: true,
-        message: error.message
-      });
-    }
-  },
-  patchUpdate: async (req, res) => {
-    try {
-      await BlogPost.findByIdAndUpdate(req.params.id, req.body);
-
-      res.send({
-        error: false,
-        message: `Blog post with id ${req.params.id} is PATCH updated`
-      });
-    } catch (error) {
-      res.status(400).send({
-        error: true,
-        message: error.message
-      });
-    }
-  },
-  delete: async (req, res) => {
-    try {
-      await BlogPost.findByIdAndDelete(req.params.id);
-
-      res.send({
-        error: false,
-        message: `Blog post with id ${req.params.id} is deleted`,
-      });
-    } catch (error) {
-      res.status(400).send({
-        error: true,
-        message: error.message
-      });
-    }
-  },
-}
+// module.exports = {
+//     fetchAll: getAll(BlogPost, "List of all blogposts", 200, 404),
+//     fetchOne: getOne(BlogPost, `Blog post with id >x< is fetched`, 200, 404),
+//     create: createOne(BlogPost, `Blog Posts is successfully created`, 201, 400),
+//     putUpdate: updatePut(BlogPost, `Blog post with id >x< is updated`, 200, 404),
+//     patchUpdate: updatePatch(BlogPost, `Blog post with id >x< is PATCH updated`, 200, 404),
+//     delete: deleteOne(BlogPost, `Blog post with id >x< is PATCH deleted`, 204, 404),
+// };

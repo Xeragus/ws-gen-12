@@ -7,6 +7,11 @@ const blogPostSchema = mongoose.Schema({
   },
   content: {
     type: String
+  },
+  category: {
+    type: mongoose.Types.ObjectId,
+    ref: 'Category',
+    required: ['[custom_message] Category is a required field']
   }
 });
 

@@ -20,13 +20,20 @@ module.exports = {
     });
   },
   create: async (req, res) => {
-    const blogPost = await BlogPost.create(req.body);
+    try {
+      const blogPost = await BlogPost.create(req.body);
 
-    res.send({
-      error: false,
-      message: `Blog post is successfully created`,
-      blogPost
-    });
+      res.send({
+        error: false,
+        message: `Blog post is successfully created`,
+        blogPost
+      });
+    } catch (error) {
+      res.status(400).send({
+        error: true,
+        message: error.message
+      });
+    }
   },
   putUpdate: async (req, res) => {
     await BlogPost.findOneAndReplace({ _id: req.params.id }, req.body);

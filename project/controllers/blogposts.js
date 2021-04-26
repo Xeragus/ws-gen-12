@@ -5,7 +5,7 @@ const errorResponse = require('../lib/responses/error');
 module.exports = {
   fetchAll: async (req, res) => { 
     try {
-      const blogPosts = await BlogPost.find();
+      const blogPosts = await BlogPost.find().populate('category');
       successResponse(res, 'List of all blogposts', blogPosts);
     } catch (error) {
       errorResponse(res, 500, error);

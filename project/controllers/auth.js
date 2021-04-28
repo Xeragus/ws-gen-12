@@ -1,4 +1,7 @@
 const User = require('../models/user');
+const successMessage = require('../lib/responses/success');
+const errorMessage = require('../lib/responses/error');
+
 
 module.exports = {
   register: async (req, res) => {
@@ -15,32 +18,18 @@ module.exports = {
      */
     try {
       let user = await User.findOne({ email: req.body.email });
-      
       if (user) {
-        return res.status(400).send({
-          error: true,
-          message: 'Bad request. Email is already in use'
-        });
+        return errorMessage(res, 400, new Error('Bad request. Email is already in use'));
       }
 
       if (!req.body.password || req.body.password != req.body.confirmation_password) {
-        return res.status(400).send({
-          error: true,
-          message: 'Bad request. Password does not exist or does not match the confirmation password.'
-        });
+        return errorMessage(res, 400, 'Bad request. Password does not exist or does not match the confirmation password.')
       }
 
       user = await User.create(req.body);
-
-      res.status(201).send({
-        error: false,
-        message: 'You have successfully registered.'
-      });
+      successMessage(res, 201, 'You have successfully registered.' )
     } catch (error) {
-      res.status(500).send({
-        error: true,
-        message: error.message
-      });
+      errorMessage(res, 400, error)
     }
   },
   login: (req, res) => {

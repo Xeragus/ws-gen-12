@@ -14,5 +14,5 @@ mongoose.connect("mongodb://localhost/ws-gen-12", {
 app.use('/', router);
 
 app.listen(3001, () => {
-  console.log("App is started on port 3001...");
+  console.log("Auth app is started on port 3001...");
 });

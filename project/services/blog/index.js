@@ -16,5 +16,5 @@ app.use("/blogposts", blogPostsRouter);
 app.use("/categories", categoriesRouter);
 
 app.listen(3000, () => {
-  console.log("App is started on port 3000...");
+  console.log("Blog app is started on port 3000...");
 });

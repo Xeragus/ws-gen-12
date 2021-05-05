@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
   register: async (req, res) => {
@@ -30,6 +31,7 @@ module.exports = {
         });
       }
 
+      req.body.password = bcrypt.hashSync(req.body.password);
       user = await User.create(req.body);
 
       res.status(201).send({

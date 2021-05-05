@@ -11,7 +11,7 @@ module.exports = {
       errorResponse(res, 500, error);
     }
   },
-  fetchOne: async (req, res) => { 
+  fetchOne: async (req, res) => {
     try {
       const blogPost = await BlogPost.findById(req.params.id);
       successResponse(res, `Blog post with id #${blogPost._id} is fetched`, blogPost);

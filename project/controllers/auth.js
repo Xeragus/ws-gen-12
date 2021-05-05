@@ -1,5 +1,8 @@
 const User = require('../models/user');
 const bcrypt = require('bcryptjs');
+const errorResponse = require('../lib/responses/error');
+const successResponse = require('../lib/responses/success');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
   register: async (req, res) => {
@@ -45,7 +48,56 @@ module.exports = {
       });
     }
   },
-  login: (req, res) => {
+  login: async (req, res) => {
+    try {
+      /**
+       * 1. Za logiranje primame email i password
+       * 2. Treba da proverime dali postoi korisnik so dadeniot email
+       * 3.1 Dokolku ne postoi, vrati nekakov response so greska
+       * 3.2 Dokolku postoi, odi na cekor 4
+       * 4. Proveri dali ponudeniot password (od request-ot) e ist so onoj na najdeniot korisnik
+       * 4.1 Dokolku ne se isti, vrakjame greska
+       * 4.2 Dokolku se isti, generirame token
+       * 5. Tokenot generiran vo minatiot cekor, go vrakjame vo response
+       */
+      const user = await User.findOne({ email: req.body.email })
 
+      if (!user) {
+        return errorResponse(res, 400, new Error('Bad request. Email not registered.'));
+      }
+
+      if (!bcrypt.compareSync(req.body.password, user.password)) {
+        return errorResponse(res, 400, new Error('Bad request. Passwords do not match.'));
+      }
+
+      const payload = {
+        id: user._id,
+        email: user.email
+      }
+
+      const token = jwt.sign(payload, 'nikola123', {
+        expiresIn: '100m'
+      });
+
+      successResponse(res, 'JWT successfully generated', token);
+    } catch (error) {
+      errorResponse(res, 500, error);
+    }
+  },
+  refreshToken: (req, res) => {
+    try {
+      const payload = {
+        id: req.user.id,
+        email: req.user.email
+      }
+
+      const token = jwt.sign(payload, 'nikola123', {
+        expiresIn: '100m'
+      });
+
+      successResponse(res, 'JWT successfully refreshed', token);
+    } catch (error) {
+      errorResponse(res, 500, error);
+    }
   }
 };

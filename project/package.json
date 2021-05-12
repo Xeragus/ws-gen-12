@@ -7,11 +7,11 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "blog": "nodemon services/blog",
     "auth": "nodemon services/auth",
     "upload": "nodemon services/upload",
-    "all": "npm-run-all --parallel blog auth upload"
+    "user": "nodemon services/user",
+    "all": "npm-run-all --parallel blog auth upload user"
   },
   "keywords": [],
   "author": "",

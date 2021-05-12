@@ -5,7 +5,7 @@ const errorResponse = require('../lib/responses/error');
 module.exports = {
   fetchAll: async (req, res) => { 
     try {
-      const blogPosts = await BlogPost.find().populate('category');
+      const blogPosts = await BlogPost.find().populate('category')//.populate('user');
       successResponse(res, 'List of all blogposts', blogPosts);
     } catch (error) {
       errorResponse(res, 500, error);
@@ -13,7 +13,7 @@ module.exports = {
   },
   fetchOne: async (req, res) => {
     try {
-      const blogPost = await BlogPost.findById(req.params.id);
+      const blogPost = await BlogPost.findById(req.params.id).populate('category')//.populate('user');
       successResponse(res, `Blog post with id #${blogPost._id} is fetched`, blogPost);
     } catch (error) {
       errorResponse(res, 500, error);
@@ -21,7 +21,11 @@ module.exports = {
   },
   create: async (req, res) => {
     try {
-      const blogPost = await BlogPost.create(req.body);
+      const blogPost = await BlogPost.create({
+        ...req.body,
+        user: req.user.id
+      });
+
       successResponse(res, `Blog post is successfully created`, blogPost);
     } catch (error) {
       errorResponse(res, 500, error);

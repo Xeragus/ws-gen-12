@@ -1,4 +1,6 @@
 const BlogPost = require("../models/blogpost");
+const User = require("../models/user");
+
 const successResponse = require("../lib/responses/success");
 const errorResponse = require("../lib/responses/error");
 const jwt = require("jsonwebtoken");
@@ -6,7 +8,7 @@ const jwt = require("jsonwebtoken");
 module.exports = {
     fetchAll: async (req, res) => {
         try {
-            const blogPosts = await BlogPost.find(); //.populate("category");
+            const blogPosts = await BlogPost.find().populate({ path: 'user', model: User });
             successResponse(res, "List of all blogposts", blogPosts);
         } catch (error) {
             errorResponse(res, 500, error);

@@ -6,5 +6,4 @@ router.post('/', controller.addCity)
       .get('/:id', controller.fetchOneCity)
       .get('/', controller.fetchAll)
 
-
 module.exports = router;

@@ -15,7 +15,7 @@ module.exports = {
   },
   fetchOne: async (req, res) => {
     try {
-      const blogPost = await BlogPost.findById(req.params.id).populate('category').populate({ path: 'user', model: User}).populate({ path: 'cities', model: City });
+      const blogPost = await BlogPost.findById(req.params.id).populate('category').populate({ path: 'user', model: User}).populate({ path: 'city', model: City });
       successResponse(res, `Blog post with id #${blogPost._id} is fetched`, blogPost);
     } catch (error) {
       errorResponse(res, 500, error);

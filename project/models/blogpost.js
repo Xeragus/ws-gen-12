@@ -17,6 +17,11 @@ const blogPostSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: 'User',
     required: ['[custom_message] User is a required field']
+  },
+  city: {
+    type: mongoose.Types.ObjectId,
+    ref: 'City',
+    required: ['City is required field']
   }
 });
 

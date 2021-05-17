@@ -1,11 +1,13 @@
 const BlogPost = require('../models/blogpost');
 const successResponse = require('../lib/responses/success');
 const errorResponse = require('../lib/responses/error');
+const City = require('../models/city');
+const User = require('../models/user');
 
 module.exports = {
   fetchAll: async (req, res) => { 
     try {
-      const blogPosts = await BlogPost.find().populate('category')//.populate('user');
+      const blogPosts = await BlogPost.find().populate('category').populate({ path: 'user', model: User}).populate({ path: 'city', model: City });
       successResponse(res, 'List of all blogposts', blogPosts);
     } catch (error) {
       errorResponse(res, 500, error);
@@ -13,7 +15,7 @@ module.exports = {
   },
   fetchOne: async (req, res) => {
     try {
-      const blogPost = await BlogPost.findById(req.params.id).populate('category')//.populate('user');
+      const blogPost = await BlogPost.findById(req.params.id).populate('category').populate({ path: 'user', model: User}).populate({ path: 'cities', model: City });
       successResponse(res, `Blog post with id #${blogPost._id} is fetched`, blogPost);
     } catch (error) {
       errorResponse(res, 500, error);

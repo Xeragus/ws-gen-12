@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const blogPostsRouter = require("./routes/blogposts");
 const categoriesRouter = require("./routes/categories");
+const citiesRouter = require("./routes/cities");
 const jwt = require('express-jwt');
 const errorResponse = require('../../lib/responses/error');
 
@@ -24,6 +25,9 @@ app.use(jwt({
     },
     {
       url: '/categories', methods: ['GET']
+    },
+    {
+      url: '/cities', methods: ['GET']
     }
   ]
 }));
@@ -36,6 +40,7 @@ app.use((err, req, res, next) => {
 
 app.use("/blogposts", blogPostsRouter);
 app.use("/categories", categoriesRouter);
+app.use("/cities", citiesRouter)
 
 app.listen(3000, () => {
   console.log("Blog app is started on port 3000...");

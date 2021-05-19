@@ -16,7 +16,16 @@ const blogPostSchema = mongoose.Schema({
   user: {
     type: mongoose.Types.ObjectId,
     ref: 'User',
+<<<<<<< HEAD
     required: [true, 'BlogPost must have an author']
+=======
+    required: ['[custom_message] User is a required field']
+  },
+  city: {
+    type: mongoose.Types.ObjectId,
+    ref: 'City',
+    required: ['City is required field']
+>>>>>>> f14f8d9b67634eb4168d3cf86c3ac176bb0f3607
   }
 });
 

@@ -25,10 +25,9 @@ module.exports = {
                                    .populate({ path: 'city', model: City });
 
       blogPost = await enrichBlogPost(blogPost);
-      console.log(blogPost);
+
       successResponse(res, `Blog post with id #${blogPost._id} is fetched`, blogPost);
     } catch (error) {
-      console.log(error);
       errorResponse(res, 500, error);
     }
   },

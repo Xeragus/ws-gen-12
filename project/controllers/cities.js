@@ -10,7 +10,6 @@ module.exports = {
         } catch (error) {
             errorResponse(res, 400, error)
         }
-        
     },
     fetchOneCity: async (req, res) => {
         try {
@@ -19,7 +18,6 @@ module.exports = {
         } catch (error) {
             errorResponse(res, 400, error);
         }
-        
     },
     fetchAll: async (req, res) => {
         try {

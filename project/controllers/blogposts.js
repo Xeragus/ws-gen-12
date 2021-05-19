@@ -3,11 +3,15 @@ const successResponse = require('../lib/responses/success');
 const errorResponse = require('../lib/responses/error');
 const City = require('../models/city');
 const User = require('../models/user');
+const enrichBlogPost = require('../lib/enrichers/blogpost');
 
 module.exports = {
   fetchAll: async (req, res) => { 
     try {
-      const blogPosts = await BlogPost.find().populate('category').populate({ path: 'user', model: User}).populate({ path: 'city', model: City });
+      const blogPosts = await BlogPost.find()
+                                      .populate('category')
+                                      .populate({ path: 'user', model: User})
+                                      .populate({ path: 'city', model: City });
       successResponse(res, 'List of all blogposts', blogPosts);
     } catch (error) {
       errorResponse(res, 500, error);
@@ -15,9 +19,16 @@ module.exports = {
   },
   fetchOne: async (req, res) => {
     try {
-      const blogPost = await BlogPost.findById(req.params.id).populate('category').populate({ path: 'user', model: User}).populate({ path: 'city', model: City });
+      let blogPost = await BlogPost.findById(req.params.id)
+                                   .populate('category')
+                                   .populate({ path: 'user', model: User})
+                                   .populate({ path: 'city', model: City });
+
+      blogPost = await enrichBlogPost(blogPost);
+      console.log(blogPost);
       successResponse(res, `Blog post with id #${blogPost._id} is fetched`, blogPost);
     } catch (error) {
+      console.log(error);
       errorResponse(res, 500, error);
     }
   },

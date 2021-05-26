@@ -4,6 +4,21 @@ const errorResponse = require('../lib/responses/error');
 const City = require('../models/city');
 const User = require('../models/user');
 const enrichBlogPost = require('../lib/enrichers/blogpost');
+const createPDF = require('../lib/pdf/blogpost');
+const sendMail = require('../lib/mailers/mailgun');
+const path = require('path');
+
+const generateEmailData = (blogPost, toEmail) => {
+  var filepath = path.join(__dirname, `../pdfs/blogpost-${blogPost._id}.pdf`);
+
+  return {
+    from: "BlogApp Admin <postmaster@sandbox72058639b9c7438293d2246a5a55ce69.mailgun.org>",
+    to: toEmail,
+    subject: "You have created a new blog post",
+    text: "Attached below you will find the blog post details.",
+    attachment: filepath
+  };
+}
 
 module.exports = {
   fetchAll: async (req, res) => { 
@@ -37,6 +52,12 @@ module.exports = {
         ...req.body,
         user: req.user.id
       });
+
+      // callbacks, promises
+      // 1. Callback implementation
+      // 2. Promisification of the createPDF function
+      createPDF(blogPost);
+      sendMail(generateEmailData(blogPost, req.user.email));
 
       successResponse(res, `Blog post is successfully created`, blogPost);
     } catch (error) {

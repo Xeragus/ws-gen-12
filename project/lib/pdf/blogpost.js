@@ -1,10 +1,11 @@
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
 
-module.exports = (blogPost) => {
+module.exports = (blogPost, cb) => {
   const doc = new PDFDocument();
 
-  doc.pipe(fs.createWriteStream(`pdfs/blogpost-${blogPost._id}.pdf`));
+  const writeStream = fs.createWriteStream(`pdfs/blogpost-${blogPost._id}.pdf`)
+  doc.pipe(writeStream);
 
   doc
     .fontSize(25)
@@ -20,4 +21,6 @@ module.exports = (blogPost) => {
     .fill('#FF3300');
 
   doc.end();
+
+  writeStream.on('finish', () => { cb() });
 }

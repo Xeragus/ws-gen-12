@@ -7,6 +7,8 @@ const citiesRouter = require("./routes/cities");
 const jwt = require('express-jwt');
 const errorResponse = require('../../lib/responses/error');
 
+require('dotenv').config();
+
 app.use(express.json());
 
 mongoose.connect("mongodb://localhost/ws-gen-12", {
@@ -16,7 +18,7 @@ mongoose.connect("mongodb://localhost/ws-gen-12", {
 });
 
 app.use(jwt({
-  secret: 'nikola123',
+  secret: process.env.AUTH_SECRET_KEY,
   algorithms: ['HS256']
 }).unless({
   path: [
@@ -42,6 +44,6 @@ app.use("/blogposts", blogPostsRouter);
 app.use("/categories", categoriesRouter);
 app.use("/cities", citiesRouter)
 
-app.listen(3000, () => {
-  console.log("Blog app is started on port 3000...");
+app.listen(process.env.BLOG_APP_PORT, () => {
+  console.log(`Blog app is started on port ${process.env.BLOG_APP_PORT}...`);
 });

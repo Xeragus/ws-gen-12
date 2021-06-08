@@ -11,7 +11,8 @@
     "blog": "nodemon services/blog",
     "auth": "nodemon services/auth",
     "upload": "nodemon services/upload",
-    "all": "npm-run-all --parallel blog auth upload"
+    "proxy": "nodemon services/proxy",
+    "all": "npm-run-all --parallel blog auth upload proxy"
   },
   "keywords": [],
   "author": "",
@@ -19,8 +20,10 @@
   "dependencies": {
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-fileupload": "^1.2.1",
+    "express-http-proxy": "^1.6.2",
     "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",

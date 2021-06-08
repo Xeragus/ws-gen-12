@@ -5,6 +5,8 @@ const router = require('./router');
 const jwt = require('express-jwt');
 const errorResponse = require('../../lib/responses/error');
 
+require('dotenv').config();
+
 app.use(express.json());
 
 mongoose.connect("mongodb://localhost/ws-gen-12", {
@@ -14,15 +16,15 @@ mongoose.connect("mongodb://localhost/ws-gen-12", {
 });
 
 app.use(jwt({
-  secret: 'nikola123',
+  secret: process.env.AUTH_SECRET_KEY,
   algorithms: ['HS256']
 }).unless({
   path: [
     {
-      url: '/register', methods: ['POST']
+      url: '/auth/register', methods: ['POST']
     },
     {
-      url: '/login', methods: ['POST']
+      url: '/auth/login', methods: ['POST']
     }
   ]
 }));
@@ -33,8 +35,8 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.use('/', router);
+app.use('/auth', router);
 
-app.listen(3001, () => {
-  console.log("Auth app is started on port 3001...");
+app.listen(process.env.AUTH_APP_PORT, () => {
+  console.log(`Auth app is started on port ${process.env.AUTH_APP_PORT}...`);
 });

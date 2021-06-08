@@ -75,7 +75,7 @@ module.exports = {
         email: user.email
       }
 
-      const token = jwt.sign(payload, 'nikola123', {
+      const token = jwt.sign(payload, process.env.AUTH_SECRET_KEY, {
         expiresIn: '100m'
       });
 
@@ -91,7 +91,7 @@ module.exports = {
         email: req.user.email
       }
 
-      const token = jwt.sign(payload, 'nikola123', {
+      const token = jwt.sign(payload, process.env.AUTH_SECRET_KEY, {
         expiresIn: '100m'
       });
 
